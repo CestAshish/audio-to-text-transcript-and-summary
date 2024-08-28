@@ -1,2 +1,2 @@
-# voice to text(transcript&and summary
+# voice to text transcript and summary
  
