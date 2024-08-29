@@ -1,5 +1,8 @@
 import os
+import gradio as gr
 import requests
+from transformers import pipeline
+
 def llm_llama(prompt):
     # Retrieve the Groq API key from environment variables
     groq_api_key = os.getenv('GROQ_API_KEY')
@@ -42,3 +45,39 @@ def llm_llama(prompt):
         return f"Error: {response.status_code} - {response.text}"
 
 
+
+# Transcribe audio and generate response
+def transcript_audio(audio_file):
+    try:
+        # Initialize the pipeline
+        pipe = pipeline(
+            "automatic-speech-recognition",
+            model="openai/whisper-tiny.en",
+            chunk_length_s=30
+        )
+
+        # Transcribe the audio file
+        transcript_txt = pipe(audio_file, batch_size=8)["text"]
+
+        # Generate response from the transcription
+        result = llm_llama(transcript_txt)
+        return result
+    except Exception as e:
+        print(f"Error processing audio: {e}")
+        return f"Error processing audio: {e}"
+
+# Define Gradio interface
+audio_input = gr.Audio(sources="upload", type="filepath")
+output_text = gr.Textbox()
+
+iface = gr.Interface(
+    fn=transcript_audio,
+    inputs=audio_input,
+    outputs=output_text,
+    title="Audio Transcription App",
+    description="Upload the audio file"
+)
+
+# Launch the Gradio app
+if __name__ == "__main__":
+    iface.launch(server_name="localhost", server_port=7860)
