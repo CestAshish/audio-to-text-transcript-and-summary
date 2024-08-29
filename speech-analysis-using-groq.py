@@ -7,6 +7,7 @@ def llm_llama(prompt):
     # Retrieve the Groq API key from environment variables
     groq_api_key = os.getenv('GROQ_API_KEY')
 
+
     # API endpoint for Groq (Replace with the correct endpoint if different)
     url = "https://api.groq.com/openai/v1/chat/completions"
 
@@ -80,4 +81,5 @@ iface = gr.Interface(
 
 # Launch the Gradio app
 if __name__ == "__main__":
-    iface.launch(server_name="localhost", server_port=7860)
+    iface.launch(server_name="0.0.0.0", server_port=7861)
+
