@@ -1,6 +1,5 @@
 transformers==4.44.2
 torch==2.4.0
 gradio
-langchain
-huggingface-hub
 groq
+requests
